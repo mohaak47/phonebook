@@ -87,6 +87,9 @@ app.post('/api/persons', (request, response) => {
         .then(savedPerson => {
           response.json(savedPerson)
         })
+        .catch((error) => {
+          console.log('Error:',error.message)
+        })
 
 const PORT = 3001
 app.listen(PORT, () =>{

@@ -41,3 +41,10 @@ const Person = mongoose.model('Person', personSchema)
 
 })
 */
+
+Person.find({}).then(result => {
+  result.forEach(person => {
+    console.log(person)
+  })
+mongoose.connection.close()
+})

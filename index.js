@@ -1,6 +1,7 @@
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
+const Person = requir('./models/person')
 
 const app = express()
 
@@ -16,23 +17,7 @@ morgan.token('person', function(req, res, person) {
 })
 
 let persons = [
-   {
-     name: "Moha Amani",
-     number: "09113525111",
-     id: 1
-   },
-
-   {
-     name: "Ary Amani",
-     number: "09113525120",
-     id: 2
-   },
-   {
-     name: "Ara Amani",
-     number: "09113525129",
-     id: 3
-   }
-]
+  ]
 
 const generateId = () => {
   if (persons.length > 0 ) {
@@ -93,15 +78,16 @@ app.post('/api/persons', (request, response) => {
      })
   }
 
-  const person = {
+  const person = new Person( {
     name: body.name,
     number: body.number,
     id: generateId()
-  }
-  persons = persons.concat(person)
-  response.json(persons)
+ )}
 
-})
+  person.save()
+        .then(savedPerson => {
+          response.json(savedPerson)
+        })
 
 const PORT = 3001
 app.listen(PORT, () =>{

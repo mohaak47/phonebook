@@ -49,7 +49,7 @@ app.post('/api/persons', (request, response) => {
 
   app.get('/api/persons/:id',(request,response) => {
     Person.findById(request.params.id).then(person => {
-      response.status(204.end()
+      response.status(204).end()
     })
   })
 

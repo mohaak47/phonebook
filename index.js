@@ -9,22 +9,7 @@ app.use(cors())
 app.use(express.static('dist'))
 
 let persons = [
-  {
-    name: 'moha amani',
-    number: '09113525123'
-  },
   ]
-
-app.get('/',(request,response) => {
-  response.send('<h1> Mohammad Amani </h1>')
-})
-
-app.get('/info',(request,response) => {
-  const numberOfPersons = persons.length
-  const date = new Date()
-  response.send(`<h3>phonebook has info for ${numberOfPersons} persons </h3>`+
-      `<p> ${date} </p>`)
-})
 
 app.get('/api/persons',(request,response) => {
   Person.find({}).then(persons => {
@@ -61,6 +46,19 @@ app.post('/api/persons', (request, response) => {
           console.log('Error:',error.message)
         })
 })
+
+  app.get('/api/persons/:id',(request,response) => {
+    Person.findById(request.params.id).then(person => {
+      response.status(204.end()
+    })
+  })
+
+  app.delete('/api/persons/:id',(request,response) => {
+    const id = Number(request.params.id)
+    persons = persons.filter(person => person.id === id )
+    response.status(204).end()
+  })
+
 const PORT = process.env.PORT
 app.listen(PORT, () =>{
   console.log(`Server running on PORT:${PORT}`)

@@ -53,7 +53,7 @@ app.post('/api/people', (request, response) => {
         .catch((error) => {
           console.log('Error:',error.message)
         })
-
+})
 const PORT = process.env.PORT
 app.listen(PORT, () =>{
   console.log(`Server running on PORT${PORT}`)

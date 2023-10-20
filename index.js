@@ -26,22 +26,6 @@ app.get('/api/people',(request,response) => {
   response.json(people)
 })
 
-app.get('/api/people/:id', (request, response) => {
-  const id = Number (request.params.id)
-  const person = people.find( (person) => person.id === id )
-  if (person) {
-    response.json(person)
-  }
-  else {
-    response.status(404).end()
-  }
-})
-
-app.delete('/api/people/:id',(request, response) => {
-  const id = Number(request.params.id)
-  people = people.filter( (person) => person.id !== id )
-  response.status(204).end()
-})
 
 app.post('/api/people', (request, response) => {
   const body = request.body
@@ -70,7 +54,7 @@ app.post('/api/people', (request, response) => {
           console.log('Error:',error.message)
         })
 
-const PORT = 3001
+const PORT = process.env.PORT
 app.listen(PORT, () =>{
   console.log(`Server running on PORT${PORT}`)
 })

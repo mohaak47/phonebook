@@ -53,7 +53,7 @@ app.post('/api/persons', (request, response) => {
        if (person) {
          response.json(person)
        }
-       elsse {
+       else {
          response.status(404).end()
        }
      })

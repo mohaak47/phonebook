@@ -9,6 +9,10 @@ app.use(cors())
 app.use(express.static('dist'))
 
 let people = [
+  {
+    name: 'moha amani',
+    number: '09113525123'
+  },
   ]
 
 app.get('/',(request,response) => {

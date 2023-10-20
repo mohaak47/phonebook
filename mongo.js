@@ -10,7 +10,7 @@ const password = process.argv[2]
 const url =
   'mongodb+srv://mohaak:' + password + '@cluster0.juukqdd.mongodb.net/phonebookApp?retryWrites=true&w=majority'
 
-mongoose.set('strictQuery', false)
+//mongoose.set('strictQuery', false)
 mongoose.connect(url)
 
 const personSchema = new mongoose.Schema({

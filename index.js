@@ -48,9 +48,19 @@ app.post('/api/persons', (request, response) => {
 })
 
   app.get('/api/persons/:id',(request,response) => {
-    Person.findById(request.params.id).then(person => {
-      response.status(204).end()
-    })
+    Person.findById(request.params.id)
+     .then(person => {
+       if (person) {
+         response.json(person)
+       }
+       elsse {
+         response.status(404).end()
+       }
+     })
+     .catch(error => {
+       console.log(error)
+       response.status(400).send({error: 'malformatted id'})
+     })
   })
 
   app.delete('/api/persons/:id',(request,response) => {

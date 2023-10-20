@@ -1,6 +1,6 @@
 const express = require('express')
 const cors = require('cors')
-const Person = requir('./models/person')
+const Person = require('./models/person')
 
 const app = express()
 

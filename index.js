@@ -66,9 +66,9 @@ app.post('/api/persons', (request, response) => {
   app.delete('/api/persons/:id',(request,response) => {
     console.log('delete request received')
      Person.findByIdAndRemove(request.body.id)
-           .then(resuilt => {
+           .then(result => {
              console.log('delete done')
-             response.status(204).end()
+             response.status(204).send({note: 'delete done'})
            })
            .catch(error => {
              console.log(error)

@@ -66,7 +66,7 @@ app.post('/api/persons', (request, response) => {
 
   app.delete('/api/persons/:id',(request,response) => {
      console.log('delete request received')
-     const id = request.params.id.toString()
+     const id = request.params.id
      console.log(id, typeof id)
      Person.findByIdAndRemove(id)
            .then(result => {

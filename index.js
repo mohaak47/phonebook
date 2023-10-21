@@ -64,8 +64,10 @@ app.post('/api/persons', (request, response) => {
   })
 
   app.delete('/api/persons/:id',(request,response) => {
+    console.log('delete request received')
      Person.findByIdAndRemove(request.body.id)
            .then(resuilt => {
+             console.log('delete done')
              response.status(204).end()
            })
            .catch(error => {

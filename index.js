@@ -33,19 +33,24 @@ app.post('/api/persons', (request, response) => {
     number: body.number,
    })
 
-  person.save()
-        .then(savedPerson => {
-          response.json(savedPerson)
-        })
-        .catch((error) => {
+  let err = validateSync()
+  if (!err) {
+     person.save()
+           .then(savedPerson => {
+             response.json(savedPerson)
+          })
+          .catch((error) => {
           if (error.name === "CastError"){
             return response.status(400).send({error: 'malformatted id'})
           } else if (error.name === "ValidationError") {
             return  response.status(400).json({error: error.message})
           }
-
         })
+      } else {
+        return response.status(400).json({error:err.message})
+      }
 })
+
 
   app.put('/api/persons/:id', (request,response) => {
     const body = request.body

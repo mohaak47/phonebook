@@ -1,104 +1,100 @@
 const express = require('express')
 const cors = require('cors')
-const Note = require('./models/note')
+const Person = require('./models/person')
 
 const app = express()
 
-const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'unknown endpoint' })
-}
-
-app.use(cors())
-app.use(express.json())
 app.use(express.static('dist'))
+app.use(express.json())
+app.use(cors())
 
 
-let notes = [
-]
+let persons = [
+  ]
 
-/* const notes = noteList.map(note => {
-  const dbNote = new Note(note)
-  dbNote.save().then(result => {
-  console.log('note saved!')
+app.get('/api/persons',(request,response) => {
+  Person.find({}).then(persons => {
+    response.json(persons)
   })
 })
-*/
 
-
-
-  app.get('/api/notes', (request, response) => {
-    Note.find({}).then(notes => {
-      response.json(notes)
+app.get('/api/persons/:id',(request,response) => {
+  Person.findById(request.params.id).then(person => {
+    response.json(person)
   })
 })
 
 
-  app.post('/api/notes', (request,response) => {
+app.post('/api/persons', (request, response) => {
+  const body = request.body
+
+  const person = new Person({
+    name: body.name,
+    number: body.number,
+   })
+
+  person.save()
+        .then(savedPerson => {
+          response.json(savedPerson)
+        })
+        .catch((error) => {
+          if (error.name === "CastError"){
+            return response.status(400).send({error: 'malformatted id'})
+          } else if (error.name === "ValidationError") {
+            return  response.status(400).json({error: error.message})
+          }
+
+        })
+})
+
+  app.put('/api/persons/:id', (request,response) => {
     const body = request.body
-
-    if (!body.content) {
-      return response.status(400).json({error: 'content missing'})
+    const person = {
+      name: body.name,
+      number: body.number,
     }
-
-    const note = new Note({
-      content: body.content,
-      important: body.important || false,
-    })
-
-
-    note.save().then(savedNote => {
-      response.json(savedNote)
-    })
+    Person.findByIdAndUpdate(request.params.id, person)
+          .then(updatedPerson => {
+            response.json(updatedPerson)
+          })
+          .catch(error => {
+            console.log(error)
+            response.status(500).end()
+          })
   })
 
-  app.get('/api/notes/:id', (request, response) => {
-    Note.findById(request.params.id)
-        .then(note => {
-      if (note){
-        response.json(note)
-      } else {
-        response.status(404).end()
-      }
-    })
-       .catch( error => {
-         console.log(error)
-         response.status(400).send({ error: 'malformatted id'})
-       })
-    })
-
-
-  app.delete('/api/notes/:id', (request, response) => {
-    Note.findByIdAndRemove(request.params.id)
-        .then(result => {
-          response.status(204).end()
-        })
-        .catch(error => {
-          console.log(error)
-          response.status(400).send({ error: 'malformatted id'})
-        })
+  app.get('/api/persons/:id',(request,response) => {
+    Person.findById(request.params.id)
+     .then(person => {
+       if (person) {
+         response.json(person)
+       }
+       else {
+         response.status(404).end()
+       }
+     })
+     .catch(error => {
+       console.log(error)
+       response.status(400).send({error: 'malformatted id'})
+     })
   })
 
-  app.put('/api/notes/:id', (request, response) => {
-    const body = request.body
-    const note = {
-      content: body.content,
-      important: body.important,
-    }
-    Note.findByIdAndUpdate(request.params.id, note, {new: true})
-        .then(updatedNote => {
-          response.json(updatedNote)
-        })
-        .catch(error => {
-          console.log(error)
-          response.status(400).send({ error: 'malformatted id'})
-        })
+  app.delete('/api/persons/:id',(request,response) => {
+     console.log('delete request received')
+     const id = request.params.id
+     console.log(id, typeof id)
+     Person.findByIdAndRemove(id)
+           .then(result => {
+             console.log('delete done')
+             response.status(204).send({note: 'delete done'})
+           })
+           .catch(error => {
+             console.log(error)
+             response.status(500).end()
+           })
   })
-
-
-
-  app.use(unknownEndpoint)
 
 const PORT = process.env.PORT
-app.listen(PORT, () => {
-console.log(`Server running on port ${PORT}`)
+app.listen(PORT, () =>{
+  console.log(`Server running on PORT:${PORT}`)
 })

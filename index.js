@@ -33,8 +33,6 @@ app.post('/api/persons', (request, response) => {
     number: body.number,
    })
 
-  let err = validateSync()
-  if (!err) {
      person.save()
            .then(savedPerson => {
              response.json(savedPerson)
@@ -46,10 +44,7 @@ app.post('/api/persons', (request, response) => {
             return  response.status(400).json({error: error.message})
           }
         })
-      } else {
-        return response.status(400).json({error:err.message})
-      }
-})
+    })
 
 
   app.put('/api/persons/:id', (request,response) => {

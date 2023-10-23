@@ -21,7 +21,7 @@ const personSchema = new mongoose.Schema({
   },
   number: {
     type: String,
-    match: /\d{11}/,
+    match: /\^d{11}$/,
     required: true,
 
   }
